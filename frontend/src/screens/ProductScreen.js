@@ -17,7 +17,7 @@ const ProductScreen = () => {
     }
 
     fetchProduct()
-  }, [])
+  }, [id])
 
   return (
     <>
@@ -78,7 +78,7 @@ const ProductScreen = () => {
               </ListGroup.Item>
             </ListGroup>
           </Card>
-        </Col>
+        </Col> 
       </Row>
     </>
   )
