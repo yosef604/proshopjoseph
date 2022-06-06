@@ -10,8 +10,6 @@ const router = express.Router()
 // @access  Public
 router.get('/', asyncHandler(async (req, res) => {
     const products = await Product.find({})
-    
-
     res.json(products)
 }))
 
@@ -20,8 +18,6 @@ router.get('/', asyncHandler(async (req, res) => {
 // @access  Public
 router.get('/:id', asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
-
-    console.log(req.params.id)
 
     if (product) {
         res.json(product)
