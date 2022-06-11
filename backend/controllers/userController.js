@@ -28,11 +28,43 @@ export const authUser = asyncHandler(async (req, res) => {
 })
 
 
+
+// @desc    Register a new user
+// @route   POST /api/users
+// @access  Public
+export const registerNewUser = asyncHandler(async (req, res) => {
+    const {name, email, password} = req.body
+
+    const userExists = await User.findOne({email})
+
+    if(userExists) {
+        res.status(400)
+        throw new Error('User already exists')
+    }
+
+    const newUser = await User.create({name, email, password})
+
+    if(newUser){
+        res.status(201).json({
+            _id: newUser._id,
+            name: newUser.name,
+            email: newUser.email,
+            isAdmin: newUser.isAdmin,
+            token: generateToken(newUser._id)
+        })
+    } else {
+        res.status(400)
+        throw new Error('Invalid user data')
+    }
+})
+
+
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Privet
 export const getUserProfile = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id)
+    
+    const user = await User.findById(req.user.id)
 
     if(user) {
         res.json({
