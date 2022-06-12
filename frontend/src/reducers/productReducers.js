@@ -31,4 +31,4 @@ export const productDetailsReducer = (state = {product: {reviews: []}}, action) 
         default:
             return state    
     }
-}
+} 

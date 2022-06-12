@@ -17,7 +17,7 @@ export const loginAction = (email, password) => async(dispatch) => {
                 'Content-Type': 'application/json'
             }
         }
-
+        
         const {data} = await axios.post(`/api/users/login`, {email, password}, config)
 
         dispatch({
@@ -29,8 +29,8 @@ export const loginAction = (email, password) => async(dispatch) => {
     } catch (error) {
         dispatch({
             type: USER_LOGIN_FAIL,
-            payload: error.response && error.response.data.messsage ? 
-            error.response.data.messsage : error.messsage
+            payload: error.response && error.response.data.message ? 
+            error.response.data.message : error.message
         })
     }
 }
