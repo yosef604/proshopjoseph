@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import {useLocation, useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import { userDetailsAction, userUpdateProfileAction } from '../actions/userActions'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -27,8 +27,8 @@ import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
     const {success} = userUpdateProfile
 
     const navigate = useNavigate()
-    const location = useLocation()
-    const redirect = location.search ? location.search.split('=')[1] : '/'
+    // const location = useLocation()
+    // const redirect = location.search ? location.search.split('=')[1] : '/'
 
     useEffect(() => {
         if (!userInfo) {

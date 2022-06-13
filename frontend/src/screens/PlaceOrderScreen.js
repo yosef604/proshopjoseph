@@ -1,6 +1,5 @@
 import React from 'react'
 import { Col, ListGroup, Row, Image, Card, Button } from 'react-bootstrap'
-import { isAccordionItemSelected } from 'react-bootstrap/esm/AccordionContext'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import CheckoutSteps from '../components/CheckoutSteps'
