@@ -4,7 +4,7 @@ import {LinkContainer} from 'react-router-bootstrap'
 import { Button, Table } from 'react-bootstrap'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { usersListAction } from '../actions/userActions'
+import { userDeleteAction, usersListAction } from '../actions/userActions'
 import { useNavigate } from 'react-router-dom'
 
 const UsersListScreen = () => {
@@ -17,16 +17,21 @@ const UsersListScreen = () => {
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo} = userLogin
 
+    const userDelete = useSelector(state => state.userDelete)
+    const {success:successDelete, message:messageDelete} = userDelete
+
     useEffect(() => {
         if(userInfo && userInfo.isAdmin) {
             dispatch(usersListAction())
         } else {
             navigate('/login')
         }
-    }, [dispatch])
+    }, [dispatch, successDelete])
 
     const deleteHandler = (id) => {
-        console.log(id)
+        if(window.confirm('Are you sure?')) {
+            dispatch(userDeleteAction(id))
+        }
     }
 
   return (
