@@ -25,7 +25,7 @@ import Loader from '../components/Loader'
         if (userInfo) {
             navigate(redirect)
         }
-    }, [navigate, userInfo, redirect])
+    }, [userInfo, redirect])
 
     const submitHandler = (e) => {
         e.preventDefault()

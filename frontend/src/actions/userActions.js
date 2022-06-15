@@ -17,7 +17,8 @@ import {
     USER_DETAILS_RESET,
     USER_LIST_SUCCESS,
     USER_LIST_REQUEST,
-    USER_LIST_FAIL
+    USER_LIST_FAIL,
+    USER_LIST_RESET
 } from '../constants/userConstants'
 
 export const loginAction = (email, password) => async(dispatch) => {
@@ -51,9 +52,13 @@ export const loginAction = (email, password) => async(dispatch) => {
 
 export const logoutAction = () => (dispatch) => {
     localStorage.removeItem('userInfo')
+    localStorage.removeItem('cartItems')
+    localStorage.removeItem('shippingAddress')
+    localStorage.removeItem('paymentMethod')
     dispatch({type: USER_LOGOUT})
-    dispatch({type: USER_DETAILS_RESET})
     dispatch({type: ORDER_USER_LIST_RESET})
+    dispatch({type: USER_LIST_RESET})
+    dispatch({type: USER_DETAILS_RESET})
 }
 
 

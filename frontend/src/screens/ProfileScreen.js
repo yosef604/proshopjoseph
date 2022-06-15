@@ -48,7 +48,7 @@ import { orderUserListAction } from '../actions/orderActions'
                 setEmail(user.email)
             }
         }
-    }, [dispatch, navigate, userInfo, user, success])
+    }, [dispatch, userInfo, user, success])
 
     const submitHandler = (e) => {
         e.preventDefault()
