@@ -7,7 +7,8 @@ import FormContainer from '../components/FormContainer'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { USER_UPDATE_RESET } from '../constants/userConstants'
-import { listProductAction, listProductDetailsAction } from '../actions/productActions'
+import { listProductAction, listProductDetailsAction, productUpdateAction } from '../actions/productActions'
+import { PRODUCT_UPDATE_RESET } from '../constants/productConstants'
 
  const EditProductScreen = () => {
 
@@ -26,31 +27,42 @@ import { listProductAction, listProductDetailsAction } from '../actions/productA
     const productDetails = useSelector(state => state.productDetails)
     const {loading, product, error} = productDetails
 
-    const userUpdate = useSelector(state => state.userUpdate)
-    const {loading:loadingUpdate, success:successUpdate, error:errorUpdate} = userUpdate
+    const productUpdate = useSelector(state => state.productUpdate)
+    const {loading:loadingUpdate, success:successUpdate, error:errorUpdate} = productUpdate
 
     const navigate = useNavigate()
 
     useEffect(() => {
 
-        if (!product.name || product._id !== id) {
-            dispatch(listProductDetailsAction(id))
-            } else {
-            setName(product.name)
-            setPrice(product.price)
-            setImage(product.image)
-            setBrand(product.isAdmin)
-            setCategory(product.category)
-            setCountInStock(product.countInStock)
-            setDescription(product.description)
-            }
-        
-    }, [dispatch, product, id])
+        if (successUpdate) {
+            dispatch({type: PRODUCT_UPDATE_RESET})
+            navigate('/admin/productsList')
+        } else {
+            if (!product.name || product._id !== id) {
+                dispatch(listProductDetailsAction(id))
+                } else {
+                setName(product.name)
+                setPrice(product.price)
+                setImage(product.image)
+                setBrand(product.brand)
+                setCategory(product.category)
+                setCountInStock(product.countInStock)
+                setDescription(product.description)
+                }
+    
+        }
+
+               
+    }, [dispatch, product, id, successUpdate])
 
     const submitHandler = (e) => {
         e.preventDefault()
-    //
-       
+        dispatch(productUpdateAction({
+            _id: id, name,
+            price, image, brand,
+            category, description,
+            countInStock
+        }))       
     }
 
   return (
@@ -60,8 +72,8 @@ import { listProductAction, listProductDetailsAction } from '../actions/productA
     </Link>
     <FormContainer>
         <h1>Edit Product</h1>
-        {/* {loadingUpdate && <Loader />} */}
-        {/* {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>} */}
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
         {loading ? <Loader />
          : ( error ? <Message variant='danger'>{error}</Message>
           : (
@@ -82,6 +94,12 @@ import { listProductAction, listProductDetailsAction } from '../actions/productA
                 <Form.Label>Image</Form.Label>
                 <Form.Control type='text' placeholder='Enter Image URL' value={image}
                 onChange={(e) => setImage(e.target.value)}></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='brand'>
+                <Form.Label>Brand</Form.Label>
+                <Form.Control type='text' placeholder='Enter brand' value={brand}
+                onChange={(e) => setBrand(e.target.value)}></Form.Control>
             </Form.Group>
 
             <Form.Group controlId='countInStock'>
