@@ -7,7 +7,8 @@ import Message from '../components/Message'
 import { userDeleteAction, usersListAction } from '../actions/userActions'
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
-import { listProductAction, productDeleteAction } from '../actions/productActions'
+import { listProductAction, productCreateAction, productDeleteAction } from '../actions/productActions'
+import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 const ProductsListScreen = () => {
     const dispatch = useDispatch()
@@ -16,10 +17,18 @@ const ProductsListScreen = () => {
     const productList = useSelector(state => state.productList)
     const {error, loading, products} = productList
 
+    const productCreate = useSelector(state => state.productCreate)
+    const {
+        error:errorCrete, 
+        loading:loadingCreate, 
+        success:successCreate,
+        product:createdProduct
+    } = productCreate
+
     const productDelete = useSelector(state => state.productDelete)
     const {
         error:errorDelete, 
-        loading:loaddingDelete, 
+        loading:loadingDelete, 
         success:successDelete
     } = productDelete
 
@@ -27,15 +36,27 @@ const ProductsListScreen = () => {
     const {userInfo} = userLogin
 
     useEffect(() => {
-        if(userInfo && userInfo.isAdmin) {
-            dispatch(listProductAction())
-        } else {
+        dispatch({type: PRODUCT_CREATE_RESET})
+
+        if(!userInfo || !userInfo.isAdmin) {
             navigate('/login')
         }
-    }, [dispatch, userInfo, successDelete])
 
-    const createProductHandler = (product) => {
+        if (successCreate){
+            navigate(`/admin/product/${createdProduct._id}/edit`)
+        } else {
+            dispatch(listProductAction())
+        }
+    }, [
+        dispatch, 
+        userInfo, 
+        successDelete, 
+        successCreate, 
+        createdProduct
+    ])
 
+    const createProductHandler = () => {
+        dispatch(productCreateAction())
     }
 
     const deleteHandler = (id) => {
@@ -54,8 +75,10 @@ const ProductsListScreen = () => {
                 </Button>
             </Col>
         </Row>
-        {loaddingDelete && <Loader />}
+        {loadingDelete && <Loader />}
         {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+        {loadingCreate && <Loader />}
+        {errorCrete && <Message variant='danger'>{errorCrete}</Message>}
         {loading ? <Loader /> : error ? 
         <Message variant='danger'>{error}</Message> : (
             <Table striped bordered hover responsive
