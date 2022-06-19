@@ -7,25 +7,32 @@ import Message from '../components/Message'
 import { userDeleteAction, usersListAction } from '../actions/userActions'
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
+import { listProductAction, productDeleteAction } from '../actions/productActions'
 
 const ProductsListScreen = () => {
-    const {id} = useParams()
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const productList = useSelector(state => state.productList)
     const {error, loading, products} = productList
 
+    const productDelete = useSelector(state => state.productDelete)
+    const {
+        error:errorDelete, 
+        loading:loaddingDelete, 
+        success:successDelete
+    } = productDelete
+
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo} = userLogin
 
     useEffect(() => {
         if(userInfo && userInfo.isAdmin) {
-            // dispatch(productsListAction())
+            dispatch(listProductAction())
         } else {
             navigate('/login')
         }
-    }, [dispatch, userInfo])
+    }, [dispatch, userInfo, successDelete])
 
     const createProductHandler = (product) => {
 
@@ -33,7 +40,7 @@ const ProductsListScreen = () => {
 
     const deleteHandler = (id) => {
         if(window.confirm('Are you sure?')) {
-            // 
+            dispatch(productDeleteAction(id))
         }
     }
 
@@ -47,7 +54,8 @@ const ProductsListScreen = () => {
                 </Button>
             </Col>
         </Row>
-
+        {loaddingDelete && <Loader />}
+        {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
         {loading ? <Loader /> : error ? 
         <Message variant='danger'>{error}</Message> : (
             <Table striped bordered hover responsive
