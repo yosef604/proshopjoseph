@@ -91,3 +91,20 @@ export const getMyOrders = asyncHandler(async (req, res) => {
 
     res.json(orders)
 })
+
+
+// @desc    Get all orders
+// @route   GET /api/orders
+// @access  Privet/Admin
+export const getAllOrders = asyncHandler(async (req, res) => {
+    
+    const orders = await Order.find({}).populate('user', 'id name')
+
+    res.json(orders)
+    // if(orders) {
+    //     res.json(orders)
+    // } else {
+    //     res.status(404)
+    //     throw new Error('No Orders')
+    // }
+})
