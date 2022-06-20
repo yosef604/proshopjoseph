@@ -27,6 +27,8 @@ const App = () => {
         <Routes>
            <Route path='/' element={<HomeScreen />} />
            <Route path='/search/:keyword' element={<HomeScreen />} />
+           <Route path='/page/:pagenumber' element={<HomeScreen />} />
+           <Route path='/search/:keyword/page/:pagenumber' element={<HomeScreen />} />
            <Route path='/product/:id' element={<ProductScreen />} />
            <Route path='/cart' element={<CartScreen />} />
            <Route path='/cart/:id' element={<CartScreen />} />
@@ -40,6 +42,7 @@ const App = () => {
            <Route path='/admin/userslist' element={<UsersListScreen />} />
            <Route path='/admin/user/:id/edit' element={<EditUserScreen />} />
            <Route path='/admin/productslist' element={<ProductsListScreen />} />
+           <Route path='/admin/productslist/:pagenumber' element={<ProductsListScreen />} />
            <Route path='/admin/product/:id/edit' element={<EditProductScreen />} />
            <Route path='/admin/orderslist' element={<OrdersListScreen />} />
         </Routes>

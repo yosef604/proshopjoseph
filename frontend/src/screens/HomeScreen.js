@@ -5,30 +5,39 @@ import { useParams } from 'react-router-dom'
 import { listProductAction } from '../actions/productActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
+import PaginationComponent from '../components/PaginationComponent'
 import Product from '../components/Product'
  
 
 const HomeScreen = () => {
   const {keyword} = useParams()
+  const {pagenumber} = useParams() || 1
   const dispatch = useDispatch()
 
   const productList = useSelector(state => state.productList)
-  const {loading, error, products} = productList
+  const {loading, error, products, page, pages} = productList
 
   useEffect(() => {
-    dispatch(listProductAction(keyword))
-  }, [dispatch, keyword])
+    dispatch(listProductAction(keyword, pagenumber))
+  }, [dispatch, keyword, pagenumber])
   return (
     <>
         <h1>Latest Products</h1>
-        {loading ? <Loader /> : error ? <Message variant='danger' /> : 
+        {loading ? 
+        <Loader /> : 
+        error ? <Message variant='danger'>{error}</Message> : 
+        <>
             <Row>
               {products.map(product => (
                   <Col key={product._id} sm={12} md={6} xl={3}> 
                       <Product product = {product} />
                   </Col>
               ))}
-            </Row>}
+            </Row>
+
+            <PaginationComponent page={page} pages={pages} 
+            keyword={keyword ? keyword : ''}/>
+        </>}
     </>
   )
 }

@@ -9,13 +9,16 @@ import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import { listProductAction, productCreateAction, productDeleteAction } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
+import PaginationComponent from '../components/PaginationComponent'
 
 const ProductsListScreen = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
+    const {pagenumber} = useParams() || 1
+
     const productList = useSelector(state => state.productList)
-    const {error, loading, products} = productList
+    const {error, loading, products, page, pages} = productList
 
     const productCreate = useSelector(state => state.productCreate)
     const {
@@ -45,14 +48,15 @@ const ProductsListScreen = () => {
         if (successCreate){
             navigate(`/admin/product/${createdProduct._id}/edit`)
         } else {
-            dispatch(listProductAction())
+            dispatch(listProductAction('', pagenumber))
         }
     }, [
         dispatch, 
         userInfo, 
         successDelete, 
         successCreate, 
-        createdProduct
+        createdProduct,
+        pagenumber
     ])
 
     const createProductHandler = () => {
@@ -81,6 +85,7 @@ const ProductsListScreen = () => {
         {errorCrete && <Message variant='danger'>{errorCrete}</Message>}
         {loading ? <Loader /> : error ? 
         <Message variant='danger'>{error}</Message> : (
+            <>
             <Table striped bordered hover responsive
             className='table-sm'>
                 <thead>
@@ -118,6 +123,9 @@ const ProductsListScreen = () => {
                     ))}
                 </tbody>
             </Table>
+
+            <PaginationComponent page={page} pages={pages} isAdmin={true} />
+            </>
         )} 
     </>
   )
