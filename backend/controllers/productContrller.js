@@ -5,7 +5,7 @@ import Product from '../models/productModel.js'
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-    const pageSize = 3
+    const pageSize = 10
     const page = Number(req.query.pageNumber) || 1
 
     const keyword = req.query.keyword ? {
@@ -155,6 +155,17 @@ export const newReview = asyncHandler(async (req, res) => {
     }
 
     res.status(201).json(product)
+})
+
+
+// @desc    Get top rated products
+// @route   GET /api/products/top
+// @access  Public
+export const getTopProducts = asyncHandler(async (req, res) => {
+    const topProducts = await Product.find({}).
+    sort({rating: -1}).limit(3)
+
+    res.json(topProducts)
 })
 
 export {
