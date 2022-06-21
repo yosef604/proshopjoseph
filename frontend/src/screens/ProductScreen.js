@@ -7,6 +7,7 @@ import { listProductDetailsAction, productCreateAction, productCreateReviewActio
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
+import Meta from '../components/Meta'
 
 
 const ProductScreen = () => {
@@ -59,6 +60,7 @@ const ProductScreen = () => {
 
       {loading ? <Loader /> : error ? <Message variant='danger' /> : 
       <>
+      <Meta title={product.name} />
       <Row>
         <Col md={6}>
           <Image src={product.image} alt={product.name} fluid />
